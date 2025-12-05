@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Kanit } from "next/font/google";
 import "./globals.css";
+import { LoadingProvider } from "./context/LoadingContext";
+import LoadingOverlay from "./components/LoadingOverlay";
+import { ToastProvider } from "./context/ToastContext";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const kanit = Kanit({
+  subsets: ["thai"],
+  weight: ["400", "500", "700"], // ใส่น้ำหนักที่ต้องใช้
+  display: "swap",
+  variable: "--font-thai",
 });
 
 export const metadata: Metadata = {
@@ -23,11 +23,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+    <html lang="th" className={kanit.className}>
+      <body>
+        <ToastProvider>
+          <LoadingProvider>
+            <LoadingOverlay />
+            {children}
+          </LoadingProvider>
+        </ToastProvider>
       </body>
     </html>
   );
