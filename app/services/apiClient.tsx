@@ -28,9 +28,9 @@ async function apiRequest<T = unknown>(
 }
 
 export const apiClient = {
-  login: (email: string, password: string) =>
+  login: (department: string, employeeId: string) =>
     apiRequest<{ token: string }>("/api/auth/login", "POST", {
-      email,
-      password,
+      department,
+      employeeId,
     }),
 };

@@ -17,21 +17,18 @@ export default function LoginPage() {
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
 
-    // อาจจะรวมเป็น email/password แบบระบบเดิมของคุณ
-    const email = employeeId;
-    const password = department;
-
     try {
       showLoading();
 
-      const res = await apiClient.login(email, password);
+      const res = await apiClient.login(department, employeeId);
 
       // บันทึก Token
       localStorage.setItem("token", res.token);
 
+      document.cookie = `token=${res.token}; path=/; max-age=604800`;
       // redirect หลัง login สำเร็จ
       showToast("เข้าสู่ระบบสำเร็จ!", "success");
-      router.push("/dashboard");
+      router.push("/bingo");
     } catch (err) {
       if (err instanceof Error) {
         showToast(err.message || "เข้าสู่ระบบไม่สำเร็จ", "error");
