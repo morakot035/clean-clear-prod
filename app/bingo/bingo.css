@@ -2,138 +2,98 @@
   width: 100%;
   min-height: 100vh;
   background: #f6f3ef;
-  padding: 24px 16px 40px;
+  padding: 16px;
   text-align: center;
   
 }
 
-/* TOP TITLE */
+/* Title */
 .title {
-  font-size: 42px;
+  font-size: 40px;
   font-weight: 700;
-  color: #c24833;
+  color: #c0392b;
   margin: 0;
 }
 
 .subtitle {
-  font-size: 64px;
+  font-size: 60px;
   font-weight: 700;
-  color: #c24833;
-  margin: 0 0 16px;
+  color: #c0392b;
+  margin: 0 0 20px 0;
 }
 
-/* Bingo Grid */
+/* Grid */
 .bingo-grid {
   width: 100%;
   max-width: 420px;
-  margin: 16px auto 24px;
+  margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 18px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
 }
 
-/* ช่องบิงโก */
+/* Each cell */
 .bingo-cell {
-  background: #c63e3e;
-  border-radius: 14px;
-  height: 130px;
-  padding: 10px;
-  color: #ffffff;
+  background: #c9483d;
+  aspect-ratio: 1 / 1;
+  border-radius: 18px;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
+  padding: 10px;
+  color: white;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 1.3;
+
+  /* VERY IMPORTANT for Thai text */
+  word-break: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
   text-align: center;
 
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
-
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  cursor: pointer;
 }
 
-.bingo-cell-text {
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 1.35;
-  word-break: keep-all;
-  white-space: normal;
-}
-
-/* hover effect – ใช้เฉพาะอุปกรณ์ที่มี hover ได้ (คอม) */
-@media (hover: hover) and (pointer: fine) {
-  .bingo-cell:hover {
-    transform: translateY(-4px) scale(1.03);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.18);
-    animation: bingoBounce 0.6s ease-in-out infinite alternate;
-  }
-}
-
-/* tap effect – มือถือ / แท็บเล็ต ใช้ class touch-animate */
-.bingo-cell.touch-animate {
-  animation: bingoTap 0.35s ease-out;
-}
-
-@keyframes bingoBounce {
-  from {
-    transform: translateY(0) scale(1.03);
-  }
-  to {
-    transform: translateY(-6px) scale(1.06);
-  }
-}
-
-@keyframes bingoTap {
-  0% {
-    transform: scale(1);
-  }
-  40% {
-    transform: scale(1.06);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.22);
-  }
-  100% {
-    transform: scale(1);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
-  }
+/* Hover (desktop) + Tap (mobile) */
+.bingo-cell:hover,
+.bingo-cell:active {
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
 }
 
 /* Reward Section */
 .reward-text {
-  margin-top: 8px;
-  font-size: 15px;
-  color: #444;
+  margin-top: 24px;
+  font-size: 16px;
 }
 
 .reward-stars {
-  margin-top: 12px;
+  margin-top: 10px;
   display: flex;
   justify-content: center;
-  gap: 32px;
+  gap: 30px;
 }
 
 .star-group {
   text-align: center;
-  font-size: 22px;
-  color: #f1c40f;
+  font-size: 24px;
 }
 
-.star-group span {
-  font-size: 14px;
-  color: #333;
-  display: block;
-  margin-top: 4px;
-}
-
-/* Responsive */
+/* Mobile responsive */
 @media (max-width: 480px) {
-  .title {
-    font-size: 32px;
-  }
-  .subtitle {
-    font-size: 44px;
-  }
+
+  .title { font-size: 32px; }
+  .subtitle { font-size: 48px; }
+
   .bingo-cell {
-    height: 115px;
+    font-size: 13px;
+    padding: 8px;
   }
-  .bingo-cell-text {
-    font-size: 15px;
+
+  .bingo-grid {
+    gap: 10px;
   }
 }
