@@ -20,7 +20,7 @@ export const BingoCell: React.FC<BingoCellProps> = ({ text }) => {
       onClick={triggerTouchAnimation}
       onTouchStart={triggerTouchAnimation}
     >
-      {/* ตัดคำไทยให้อยู่กลางสวย ๆ */}
+      {/* ตัดคำไทยให้อยู่กลางสวย ๆddddd */}
       <span className="bingo-cell-text">{text}</span>
     </div>
   );
