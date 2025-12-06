@@ -31,20 +31,26 @@ export default function BingoPage() {
       </div>
 
       {/* Reward Text */}
-      <p className="reward-text">
-        สะสมครบ 1 แถว เท่ากับ 1 ดาว = แลกรับของรางวัล
-      </p>
+      <div className="reward-section">
+        <p className="reward-text">
+          สะสมครบ 1 แถว เท่ากับ 1 ดาว = แลกรับของรางวัล
+        </p>
 
-      {/* Stars */}
-      <div className="reward-stars">
-        <div className="star-group">
-          ⭐ <span>ขนม</span>
-        </div>
-        <div className="star-group">
-          ⭐⭐ <span>ของขวัญ</span>
-        </div>
-        <div className="star-group">
-          ⭐⭐⭐ <span>voucher</span>
+        <div className="reward-stars">
+          <div className="star-group">
+            <div className="stars">⭐</div>
+            <div className="label">ขนม</div>
+          </div>
+
+          <div className="star-group">
+            <div className="stars">⭐⭐</div>
+            <div className="label">ของขวัญ</div>
+          </div>
+
+          <div className="star-group">
+            <div className="stars">⭐⭐⭐</div>
+            <div className="label">voucher</div>
+          </div>
         </div>
       </div>
     </div>

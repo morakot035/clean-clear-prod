@@ -4,7 +4,6 @@
   background: #f6f3ef;
   padding: 16px;
   text-align: center;
-  
 }
 
 /* Title */
@@ -65,21 +64,52 @@
 }
 
 /* Reward Section */
+.reward-section {
+  margin-top: 30px;
+  text-align: center;
+}
+
 .reward-text {
-  margin-top: 24px;
-  font-size: 16px;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 20px;
 }
 
 .reward-stars {
-  margin-top: 10px;
   display: flex;
   justify-content: center;
-  gap: 30px;
+  gap: 40px;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 .star-group {
-  text-align: center;
-  font-size: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stars {
+  font-size: 32px;
+  color: #f1c40f;
+}
+
+.label {
+  margin-top: 8px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #333;
+}
+
+/* Responsive for mobile */
+@media (max-width: 480px) {
+  .reward-stars {
+    gap: 24px;
+  }
+
+  .stars {
+    font-size: 30px;
+  }
 }
 
 /* Mobile responsive */
@@ -96,4 +126,23 @@
   .bingo-grid {
     gap: 10px;
   }
+}
+
+
+/* Checkmark overlay */
+.checkmark {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: #2ecc71;
+  color: white;
+  font-size: 20px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  box-shadow: 0 0 4px rgba(0,0,0,0.3);
 }
