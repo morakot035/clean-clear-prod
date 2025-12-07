@@ -1,5 +1,25 @@
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
+// --- Bingo types ---
+export type BingoTask = {
+  index: number;
+  title: string;
+  completed: boolean;
+  imageUrl?: string;
+};
+
+export type BingoProgress = {
+  employeeId: string;
+  department: string;
+  fullName: string;
+  tasks: BingoTask[];
+};
+
+export type BingoProgressResponse = {
+  success: boolean;
+  progress: BingoProgress;
+};
+
 async function apiRequest<T = unknown>(
   endpoint: string,
   method: "GET" | "POST" | "PUT" | "DELETE" = "GET",
@@ -33,4 +53,22 @@ export const apiClient = {
       department,
       employeeId,
     }),
+
+  // โหลด progress
+  getProgress: (token: string) =>
+    apiRequest<BingoProgressResponse>(
+      "/api/bingo/progress",
+      "GET",
+      undefined,
+      token
+    ),
+
+  // อัปเดต task ที่ทำแล้ว
+  updateTask: (taskIndex: number, imageUrl: string, token: string) =>
+    apiRequest<BingoProgressResponse>(
+      "/api/bingo/update",
+      "POST",
+      { taskIndex, imageUrl },
+      token
+    ),
 };

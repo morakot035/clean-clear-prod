@@ -1,19 +1,33 @@
 "use client";
-import { useRef, useState } from "react";
+
+import { useRef } from "react";
 import "../bingo/bingo.css";
 
-export function BingoCell({ text }: { text: string }) {
-  const fileInput = useRef<HTMLInputElement>(null);
-  const [completed, setCompleted] = useState(false);
+interface BingoCellProps {
+  index: number;
+  text: string;
+  completed: boolean;
+  onUpload: (index: number, file: File) => void;
+}
+
+export function BingoCell({
+  index,
+  text,
+  completed,
+  onUpload,
+}: BingoCellProps) {
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleClick = () => {
-    fileInput.current?.click();
+    // ถ้าอยากไม่ให้เปลี่ยนรูปเมื่อทำแล้วก็กันไว้ตรงนี้
+    // if (completed) return;
+    fileInputRef.current?.click();
   };
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      setCompleted(true); // อัพโหลดแล้ว = complete
-    }
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || e.target.files.length === 0) return;
+    const file = e.target.files[0];
+    onUpload(index, file);
   };
 
   return (
@@ -21,9 +35,9 @@ export function BingoCell({ text }: { text: string }) {
       <input
         type="file"
         accept="image/*"
-        ref={fileInput}
+        ref={fileInputRef}
         style={{ display: "none" }}
-        onChange={handleFileSelect}
+        onChange={handleFileChange}
       />
 
       <div className="cell-text">{text}</div>

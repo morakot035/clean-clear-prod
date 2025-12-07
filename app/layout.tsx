@@ -4,6 +4,7 @@ import "./globals.css";
 import { LoadingProvider } from "./context/LoadingContext";
 import LoadingOverlay from "./components/LoadingOverlay";
 import { ToastProvider } from "./context/ToastContext";
+import "animate.css";
 
 const kanit = Kanit({
   subsets: ["thai"],

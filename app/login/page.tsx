@@ -4,7 +4,17 @@ import { useState } from "react";
 import { apiClient } from "../services/apiClient";
 import { useRouter } from "next/navigation";
 import { useLoading } from "../context/LoadingContext";
-import { useToast } from "../context/ToastContext";
+
+import Swal from "sweetalert2";
+
+const DEPARTMENTS = [
+  "ฝ่ายผลิต",
+  "ฝ่ายจัดซื้อ",
+  "ฝ่ายคลังสินค้า",
+  "ฝ่ายบุคคล",
+  "ฝ่ายธุรการ",
+  "ฝ่ายอื่นๆ",
+];
 
 export default function LoginPage() {
   const router = useRouter();
@@ -12,29 +22,68 @@ export default function LoginPage() {
 
   const [employeeId, setEmployeeId] = useState("");
   const [department, setDepartment] = useState("");
-  const { showToast } = useToast();
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
+
+    if (!employeeId.trim() || !department) {
+      Swal.fire({
+        title: "กรุณากรอกข้อมูลให้ครบ",
+        text: "ต้องกรอกรหัสพนักงานและเลือกฝ่ายก่อนเข้าร่วมกิจกรรม",
+        icon: "warning",
+        confirmButtonText: "ตกลง",
+        confirmButtonColor: "#f97316",
+        background: "#fff7ed",
+        showClass: {
+          popup: "animate__animated animate__shakeX",
+        },
+        hideClass: {
+          popup: "animate__animated animate__fadeOut",
+        },
+      });
+      return;
+    }
 
     try {
       showLoading();
 
       const res = await apiClient.login(department, employeeId);
 
-      // บันทึก Token
       localStorage.setItem("token", res.token);
-
       document.cookie = `token=${res.token}; path=/; max-age=604800`;
-      // redirect หลัง login สำเร็จ
-      showToast("เข้าสู่ระบบสำเร็จ!", "success");
+
+      await Swal.fire({
+        title: "🎄 เข้าสู่ระบบสำเร็จ!",
+        html: `ยินดีต้อนรับสู่กิจกรรม <b>Christmas Clean & Clear</b>`,
+        icon: "success",
+        confirmButtonText: "เริ่มเล่น BINGO",
+        confirmButtonColor: "#22c55e",
+        background: "#f0fdf4",
+        showClass: {
+          popup: "animate__animated animate__zoomIn",
+        },
+        hideClass: {
+          popup: "animate__animated animate__zoomOut",
+        },
+      });
       router.push("/bingo");
     } catch (err) {
-      if (err instanceof Error) {
-        showToast(err.message || "เข้าสู่ระบบไม่สำเร็จ", "error");
-      } else {
-        showToast("เข้าสู่ระบบล้มเหลว", "error");
-      }
+      const message =
+        err instanceof Error ? err.message : "เข้าสู่ระบบไม่สำเร็จ";
+      Swal.fire({
+        title: "เข้าสู่ระบบไม่สำเร็จ",
+        text: message,
+        icon: "error",
+        confirmButtonText: "ลองใหม่อีกครั้ง",
+        confirmButtonColor: "#ef4444",
+        background: "#fef2f2",
+        showClass: {
+          popup: "animate__animated animate__shakeX",
+        },
+        hideClass: {
+          popup: "animate__animated animate__fadeOut",
+        },
+      });
     } finally {
       hideLoading();
     }
@@ -58,7 +107,6 @@ export default function LoginPage() {
               translate-y-24 sm:translate-y-32 md:translate-y-40
             "
           >
-            {/* --- กล่องฟอร์ม 2 แถวติดกัน --- */}
             <div className="space-y-0">
               {/* รหัสพนักงาน */}
               <div
@@ -87,7 +135,7 @@ export default function LoginPage() {
                 />
               </div>
 
-              {/* ฝ่าย */}
+              {/* ฝ่าย (Dropdown) */}
               <div
                 className="
                   grid 
@@ -103,21 +151,26 @@ export default function LoginPage() {
                   ฝ่าย
                 </label>
 
-                <input
+                <select
                   value={department}
                   onChange={(e) => setDepartment(e.target.value)}
                   className="
                     h-10 bg-white rounded-md border border-gray-300 
                     px-3 text-sm w-full focus:ring-2 focus:ring-green-500
                   "
-                  placeholder="ระบุฝ่าย"
-                />
+                >
+                  <option value="" disabled>
+                    เลือกฝ่าย
+                  </option>
+                  {DEPARTMENTS.map((dept) => (
+                    <option key={dept} value={dept}>
+                      {dept}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
 
-            {/* Error message */}
-
-            {/* ปุ่ม */}
             <button
               type="submit"
               className="

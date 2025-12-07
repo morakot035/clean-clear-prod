@@ -10,10 +10,15 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
+    "animate.css": "^4.1.1",
     "clsx": "^2.1.1",
+    "firebase-frameworks": "^0.11.8",
+    "firebase-tools": "^14.27.0",
+    "jwt-decode": "^4.0.0",
     "next": "16.0.7",
     "react": "19.2.0",
-    "react-dom": "19.2.0"
+    "react-dom": "19.2.0",
+    "sweetalert2": "^11.26.4"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
