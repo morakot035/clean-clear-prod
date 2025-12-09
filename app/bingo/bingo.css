@@ -1,18 +1,41 @@
-.bingo-container {
+/* .bingo-container {
   width: 100%;
   min-height: 100vh;
-  background: #f6f3ef;
   padding: 16px;
   text-align: center;
-}
+} */
 
 /* Title */
-.title {
+/* .title {
   font-size: 40px;
   font-weight: 700;
   color: #c0392b;
   margin: 0;
+} */
+.bingo-wrapper {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #f6f3ef;         /* สีพื้นหลังเดียวกับในรูป */
+  background-image: url("/bg2.PNG");
+  background-repeat: no-repeat;
+  background-position: top center;
+  background-size: contain;          /* เหมือนเดิม */
 }
+
+.bingo-container {
+  background: transparent !important;
+  margin: 0;
+  min-height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 180px;   /* ดัน grid ลงให้ไม่บัง Christmas BINGO */
+}
+.title, .subtitle {
+  display: none; /* ซ่อน Title เพราะมันอยู่ใน BG แล้ว */
+}
+
 
 .subtitle {
   font-size: 60px;
@@ -174,3 +197,5 @@
     transform: scale(1);
   }
 }
+
+

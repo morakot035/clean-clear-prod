@@ -91,98 +91,81 @@ export default function LoginPage() {
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-[#00163a]">
+      {/* พื้นหลังเต็มจอ */}
       <div
         className="
-          relative w-full h-screen 
-          bg-no-repeat bg-center bg-contain 
-          md:bg-cover md:h-[720px] md:max-w-[1280px]
+          relative w-full h-screen
+          bg-[url('/login.png')]
+          bg-no-repeat bg-cover bg-top
+          md:max-w-[1280px]
         "
-        style={{ backgroundImage: "url('/clean-clear-bg.jpg')" }}
       >
-        <div className="absolute inset-0 flex items-center justify-center">
-          <form
-            onSubmit={handleLogin}
+        {/* ฟอร์มวางทับ “ในกรอบเขียว” */}
+        <form
+          onSubmit={handleLogin}
+          className="
+            absolute
+            /* ลองจูนสองตัวนี้ ถ้ายังไม่ตรงเป๊ะ */
+            top-[64%]           /* ขยับขึ้นลง */
+            left-[66%]          /* ขยับซ้ายขวา */
+            
+            -translate-x-1/2 -translate-y-1/2
+            w-[72%] max-w-[240px]   /* ให้กว้างใกล้กรอบเขียว */
+            space-y-3
+          "
+        >
+          {/* รหัสพนักงาน */}
+          <input
+            value={employeeId}
+            onChange={(e) => setEmployeeId(e.target.value)}
             className="
-              w-[88%] max-w-2xl 
-              translate-y-24 sm:translate-y-32 md:translate-y-40
+              w-full h-12 px-4
+              rounded-lg border border-gray-300
+              bg-white text-gray-700
+              placeholder-gray-400
+              focus:ring-2 focus:ring-green-500
+              shadow-sm
+            "
+            placeholder="กรอกรหัสพนักงาน"
+          />
+
+          {/* เลือกฝ่าย */}
+          <select
+            value={department}
+            onChange={(e) => setDepartment(e.target.value)}
+            className="
+              w-full h-12 px-4
+              rounded-lg border border-gray-300
+              bg-white text-gray-700
+              focus:ring-2 focus:ring-green-500
+              shadow-sm
             "
           >
-            <div className="space-y-0">
-              {/* รหัสพนักงาน */}
-              <div
-                className="
-                  grid 
-                  grid-cols-[130px_minmax(0,1fr)]
-                  sm:grid-cols-[150px_minmax(0,1fr)]
-                  bg-[#dce6be] 
-                  rounded-t-lg
-                  p-2 
-                  shadow-md
-                "
-              >
-                <label className="flex items-center font-semibold text-black pl-2">
-                  รหัสพนักงาน
-                </label>
+            <option value="" disabled>
+              เลือกฝ่าย
+            </option>
+            {DEPARTMENTS.map((dept) => (
+              <option key={dept} value={dept}>
+                {dept}
+              </option>
+            ))}
+          </select>
 
-                <input
-                  value={employeeId}
-                  onChange={(e) => setEmployeeId(e.target.value)}
-                  className="
-                    h-10 bg-white rounded-md border border-gray-300 
-                    px-3 text-sm w-full focus:ring-2 focus:ring-green-500
-                  "
-                  placeholder="กรอกรหัสพนักงาน"
-                />
-              </div>
-
-              {/* ฝ่าย (Dropdown) */}
-              <div
-                className="
-                  grid 
-                  grid-cols-[130px_minmax(0,1fr)]
-                  sm:grid-cols-[150px_minmax(0,1fr)]
-                  bg-[#dce6be] 
-                  rounded-b-lg
-                  p-2 
-                  shadow-md
-                "
-              >
-                <label className="flex items-center font-semibold text-black pl-2">
-                  ฝ่าย
-                </label>
-
-                <select
-                  value={department}
-                  onChange={(e) => setDepartment(e.target.value)}
-                  className="
-                    h-10 bg-white rounded-md border border-gray-300 
-                    px-3 text-sm w-full focus:ring-2 focus:ring-green-500
-                  "
-                >
-                  <option value="" disabled>
-                    เลือกฝ่าย
-                  </option>
-                  {DEPARTMENTS.map((dept) => (
-                    <option key={dept} value={dept}>
-                      {dept}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              className="
-                mt-3 w-full h-10 bg-[#ffb800] 
-                text-[#4a2100] font-bold rounded-md shadow-md 
-                active:scale-95 transition
-              "
-            >
-              เข้าร่วมกิจกรรม
-            </button>
-          </form>
-        </div>
+          {/* ปุ่ม */}
+          <button
+            type="submit"
+            className="
+              w-full h-12
+              bg-[#ffb800]
+              text-[#4a2100] font-bold
+              rounded-lg shadow-md
+              active:scale-95
+              transition
+            "
+          >
+            เข้าร่วมกิจกรรม
+          </button>
+        </form>
       </div>
     </main>
   );

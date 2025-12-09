@@ -141,46 +141,50 @@ export default function BingoPage() {
   }
 
   return (
-    <div className="bingo-container">
-      <h1 className="title">Christmas</h1>
-      <h2 className="subtitle">BINGO</h2>
+    <div className="bingo-wrapper">
+      <div className="bingo-content">
+        <div className="bingo-container">
+          <h1 className="title">Christmas</h1>
+          <h2 className="subtitle">BINGO</h2>
 
-      {/* แสดงดาวที่มีตอนนี้ (จะไม่โชว์ก็ได้) */}
-      <p className="current-stars">คุณมีดาวสะสมทั้งหมด: {stars} ⭐</p>
+          {/* แสดงดาวที่มีตอนนี้ (จะไม่โชว์ก็ได้) */}
+          <p className="current-stars">คุณมีดาวสะสมทั้งหมด: {stars} ⭐</p>
 
-      {/* Bingo Grid */}
-      <div className="bingo-grid">
-        {tasks.map((task) => (
-          <BingoCell
-            key={task.index}
-            index={task.index}
-            text={task.title}
-            completed={task.completed}
-            onUpload={handleUpload}
-          />
-        ))}
-      </div>
-
-      {/* Reward Text */}
-      <div className="reward-section">
-        <p className="reward-text">
-          สะสมครบ 1 แถว เท่ากับ 1 ดาว = แลกรับของรางวัล
-        </p>
-
-        <div className="reward-stars">
-          <div className="star-group">
-            <div className="stars">⭐</div>
-            <div className="label">ขนม</div>
+          {/* Bingo Grid */}
+          <div className="bingo-grid">
+            {tasks.map((task) => (
+              <BingoCell
+                key={task.index}
+                index={task.index}
+                text={task.title}
+                completed={task.completed}
+                onUpload={handleUpload}
+              />
+            ))}
           </div>
 
-          <div className="star-group">
-            <div className="stars">⭐⭐</div>
-            <div className="label">ของขวัญ</div>
-          </div>
+          {/* Reward Text */}
+          <div className="reward-section">
+            <p className="reward-text">
+              สะสมครบ 1 แถว เท่ากับ 1 ดาว = แลกรับของรางวัล
+            </p>
 
-          <div className="star-group">
-            <div className="stars">⭐⭐⭐</div>
-            <div className="label">voucher</div>
+            <div className="reward-stars">
+              <div className="star-group">
+                <div className="stars">⭐</div>
+                <div className="label">ขนม</div>
+              </div>
+
+              <div className="star-group">
+                <div className="stars">⭐⭐</div>
+                <div className="label">ของขวัญ</div>
+              </div>
+
+              <div className="star-group">
+                <div className="stars">⭐⭐⭐</div>
+                <div className="label">voucher</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
