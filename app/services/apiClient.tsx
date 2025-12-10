@@ -20,6 +20,30 @@ export type BingoProgressResponse = {
   progress: BingoProgress;
 };
 
+export interface UserScore {
+  employeeId: string;
+  fullName: string;
+  department: string;
+  completedCount: number;
+  stars: number;
+  images: {
+    index: number;
+    title: string;
+    imageUrl: string;
+    uploadedAt: string;
+  }[];
+}
+
+interface LeaderboardResponse {
+  success: boolean;
+  leaderboard: UserScore[];
+}
+
+interface UploadImageResponse {
+  success: boolean;
+  imageUrl: string;
+}
+
 async function apiRequest<T = unknown>(
   endpoint: string,
   method: "GET" | "POST" | "PUT" | "DELETE" = "GET",
@@ -71,4 +95,32 @@ export const apiClient = {
       { taskIndex, imageUrl },
       token
     ),
+
+  leaderBoard: (token: string) =>
+    apiRequest<LeaderboardResponse>(
+      "/api/bingo/leaderboard",
+      "GET",
+      undefined,
+      token
+    ),
+
+  // uploadImage: (formData: FormData, token: string) =>
+  //   apiRequest<{ success: boolean; imageUrl: string }>(
+  //     "/api/bingo/upload",
+  //     "POST",
+  //     formData,
+  //     token
+  //   ),
+  uploadImage: async (formData: FormData, token: string) => {
+    const res = await fetch(`${BASE_URL}/api/bingo/upload`, {
+      method: "POST",
+      headers: {
+        ...(token && { Authorization: `Bearer ${token}` }),
+        // ❌ ห้ามใส่ "Content-Type": "application/json"
+      },
+      body: formData,
+    });
+
+    return res.json();
+  },
 };

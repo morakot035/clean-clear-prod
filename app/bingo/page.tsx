@@ -73,11 +73,16 @@ export default function BingoPage() {
 
       // ตอนนี้ mock imageUrl = file.name
       // ถ้ามีระบบอัปโหลดจริง ค่อยเปลี่ยนเป็น URL จาก backend
-      const imageUrl = file.name;
+      //const imageUrl = file.name;
+
+      const formData = new FormData();
+      formData.append("image", file);
+
+      const uploadRes = await apiClient.uploadImage(formData, token);
 
       const oldStars = calculateStars(tasks);
 
-      const res = await apiClient.updateTask(index, imageUrl, token);
+      const res = await apiClient.updateTask(index, uploadRes.imageUrl, token);
 
       const updatedTasks = res.progress.tasks || [];
       setTasks(updatedTasks);
