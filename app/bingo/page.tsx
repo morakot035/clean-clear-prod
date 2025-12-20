@@ -169,7 +169,7 @@ export default function BingoPage() {
           </div>
 
           {/* Reward Text */}
-          <div className="reward-section">
+          {/* <div className="reward-section">
             <p className="reward-text">
               สะสมครบ 1 แถว เท่ากับ 1 ดาว = แลกรับของรางวัล
             </p>
@@ -190,7 +190,7 @@ export default function BingoPage() {
                 <div className="label">voucher</div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
