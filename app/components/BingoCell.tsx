@@ -7,6 +7,7 @@ interface BingoCellProps {
   index: number;
   text: string;
   completed: boolean;
+  isBingo?: boolean;
   onUpload: (index: number, file: File) => void;
 }
 
@@ -14,24 +15,27 @@ export function BingoCell({
   index,
   text,
   completed,
+  isBingo,
   onUpload,
 }: BingoCellProps) {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleClick = () => {
-    // ถ้าอยากไม่ให้เปลี่ยนรูปเมื่อทำแล้วก็กันไว้ตรงนี้
-    // if (completed) return;
     fileInputRef.current?.click();
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) return;
-    const file = e.target.files[0];
-    onUpload(index, file);
+    onUpload(index, e.target.files[0]);
   };
 
   return (
-    <div className="bingo-cell" onClick={handleClick}>
+    <div
+      className={`bingo-cell ${completed ? "completed" : ""} ${
+        isBingo ? "bingo-win" : ""
+      }`}
+      onClick={handleClick}
+    >
       <input
         type="file"
         accept="image/*"

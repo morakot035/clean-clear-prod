@@ -1,5 +1,5 @@
 "use client";
-
+import * as XLSX from "xlsx";
 import { useEffect, useState } from "react";
 import { apiClient, BingoTask } from "../services/apiClient";
 import { useLoading } from "../context/LoadingContext";
@@ -50,7 +50,17 @@ export default function LeaderboardPage() {
   return (
     <div className="p-4">
       <h1 className="text-3xl font-bold mb-4 text-center">🎉 Leaderboard</h1>
-
+      <button
+        onClick={() => {
+          window.open(
+            `${process.env.NEXT_PUBLIC_API_URL}/api/export/leaderboard/excel`,
+            "_blank"
+          );
+        }}
+        className="mb-4 px-4 py-2 bg-green-600 text-white rounded"
+      >
+        📥 Export Excel (พร้อมรูป)
+      </button>
       {data.map((user, i) => (
         <div key={i} className="bg-white p-4 shadow rounded-lg mb-6">
           <h2 className="text-xl font-bold">

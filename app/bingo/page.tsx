@@ -8,142 +8,113 @@ import { useLoading } from "../context/LoadingContext";
 import Swal from "sweetalert2";
 import "./bingo.css";
 
-// คำนวณจำนวนดาวจาก tasks (ดูจาก field completed)
-function calculateStars(tasks: BingoTask[]): number {
-  if (!tasks || tasks.length === 0) return 0;
+/* ===== BINGO LINES (3x3) ===== */
+const BINGO_LINES = [
+  [0, 1, 2], // แนวนอน
+  [3, 4, 5],
+  [6, 7, 8],
+  [0, 3, 6], // แนวตั้ง
+  [1, 4, 7],
+  [2, 5, 8],
+  [0, 4, 8], // ทแยง
+  [2, 4, 6],
+];
 
-  const rows = [
-    [0, 1, 2], // row 1
-    [3, 4, 5], // row 2
-    [6, 7, 8], // row 3
-  ];
+function getBingoResult(tasks: BingoTask[]) {
+  const completedLines = BINGO_LINES.filter((line) =>
+    line.every((idx) => tasks[idx]?.completed === true)
+  );
 
-  let stars = 0;
-
-  for (const row of rows) {
-    const isDone = row.every((idx) => tasks[idx]?.completed === true);
-    if (isDone) stars += 1;
-  }
-
-  return Math.min(stars, 3); // จำกัดสูงสุด 3 ดาว
+  return {
+    count: completedLines.length,
+    completedLines,
+  };
 }
 
 export default function BingoPage() {
   useAuthGuard();
   const { showLoading, hideLoading } = useLoading();
-  const [tasks, setTasks] = useState<BingoTask[]>([]);
-  const [stars, setStars] = useState<number>(0);
-  const [prevStars, setPrevStars] = useState<number>(0);
 
-  // โหลด progress ตอนเปิดหน้า
+  const [tasks, setTasks] = useState<BingoTask[]>([]);
+  const [bingoCount, setBingoCount] = useState(0);
+  const [completedLines, setCompletedLines] = useState<number[][]>([]);
+
+  /* ===== โหลด progress ===== */
   useEffect(() => {
     async function loadProgress() {
       const token = localStorage.getItem("token");
       if (!token) return;
 
       try {
-        showLoading(); // ⬅️ แสดงโหลด
-
+        showLoading();
         const res = await apiClient.getProgress(token);
         const loadedTasks = res.progress.tasks || [];
-        setTasks(res.progress.tasks);
 
-        const initialStars = calculateStars(loadedTasks);
-        setStars(initialStars);
-        setPrevStars(initialStars);
+        setTasks(loadedTasks);
+
+        const result = getBingoResult(loadedTasks);
+        setBingoCount(result.count);
+        setCompletedLines(result.completedLines);
       } catch (err) {
-        console.error("โหลด progress ไม่สำเร็จ:", err);
+        console.error(err);
       } finally {
-        hideLoading(); // ⬅️ ปิดโหลด
+        hideLoading();
       }
     }
 
     loadProgress();
   }, []);
 
-  // เวลาอัปโหลดจาก cell ใด cell หนึ่ง
-
-  async function handleUpload(index: number, file: File): Promise<void> {
-    const token =
-      typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  /* ===== upload จาก cell ===== */
+  async function handleUpload(index: number, file: File) {
+    const token = localStorage.getItem("token");
     if (!token) return;
 
     try {
       showLoading();
 
-      // ตอนนี้ mock imageUrl = file.name
-      // ถ้ามีระบบอัปโหลดจริง ค่อยเปลี่ยนเป็น URL จาก backend
-      //const imageUrl = file.name;
+      const oldResult = getBingoResult(tasks);
 
       const formData = new FormData();
       formData.append("image", file);
 
       const uploadRes = await apiClient.uploadImage(formData, token);
-
-      const oldStars = calculateStars(tasks);
-
       const res = await apiClient.updateTask(index, uploadRes.imageUrl, token);
 
       const updatedTasks = res.progress.tasks || [];
       setTasks(updatedTasks);
 
-      const newStars = calculateStars(updatedTasks);
+      const newResult = getBingoResult(updatedTasks);
+      setBingoCount(newResult.count);
+      setCompletedLines(newResult.completedLines);
 
-      // ถ้าได้ดาวเพิ่ม
-      if (newStars > oldStars) {
-        setStars(newStars);
-        setPrevStars(newStars);
-
-        const gained = newStars - oldStars;
-
+      if (newResult.count > oldResult.count) {
         Swal.fire({
-          title: "🎉 ยินดีด้วย!",
+          title: "🎉 BINGO!",
           html: `
-            คุณสะสมครบอีก <b>${gained} แถว</b><br/>
-            ⭐ ดาวเพิ่มจาก <b>${oldStars}</b> → <b>${newStars}</b>
+            คุณได้บิงโกเพิ่ม <b>${
+              newResult.count - oldResult.count
+            }</b> เส้น<br/>
+            รวมทั้งหมด <b>${newResult.count}</b> เส้น
           `,
           icon: "success",
           confirmButtonText: "เยี่ยมเลย!",
-          confirmButtonColor: "#ff6f3c",
-          background: "#fff9f4",
-          // ✅ animation เข้า
-          showClass: {
-            popup: "animate__animated animate__zoomIn animate__faster",
-          },
-          // ✅ animation ออก
-          hideClass: {
-            popup: "animate__animated animate__zoomOut animate__faster",
-          },
-          // ✅ backdrop ฟุ้ง ๆ หน่อย
-          backdrop: `
-            rgba(0,0,0,0.4)
-            left top
-            no-repeat
-          `,
+          confirmButtonColor: "#22c55e",
         });
-      } else {
-        setStars(newStars);
-        setPrevStars(newStars);
       }
-    } catch (error) {
+    } catch (err) {
       Swal.fire({
         title: "เกิดข้อผิดพลาด",
-        text: "อัปโหลดไม่สำเร็จ กรุณาลองใหม่อีกครั้ง",
+        text: "อัปโหลดไม่สำเร็จ",
         icon: "error",
-        confirmButtonText: "ตกลง",
-        confirmButtonColor: "#e11d48",
-        background: "#fff1f2",
-        showClass: {
-          popup: "animate__animated animate__shakeX",
-        },
-        hideClass: {
-          popup: "animate__animated animate__fadeOut",
-        },
       });
     } finally {
       hideLoading();
     }
   }
+
+  /* ===== ช่องที่อยู่ในเส้น BINGO ===== */
+  const bingoCells = new Set<number>(completedLines.flat());
 
   return (
     <div className="bingo-wrapper">
@@ -153,7 +124,7 @@ export default function BingoPage() {
           <h2 className="subtitle">BINGO</h2>
 
           {/* แสดงดาวที่มีตอนนี้ (จะไม่โชว์ก็ได้) */}
-          <p className="current-stars">คุณมีดาวสะสมทั้งหมด: {stars} ⭐</p>
+          <p className="current-stars"> 🎯 BINGO ที่ได้: {bingoCount}</p>
 
           {/* Bingo Grid */}
           <div className="bingo-grid">
@@ -163,6 +134,7 @@ export default function BingoPage() {
                 index={task.index}
                 text={task.title}
                 completed={task.completed}
+                isBingo={bingoCells.has(task.index)}
                 onUpload={handleUpload}
               />
             ))}
