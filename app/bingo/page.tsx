@@ -126,7 +126,7 @@ export default function BingoPage() {
             📱 ใช้งานผ่านมือถือเท่านั้น
           </h1>
           <p className="text-gray-600 mb-4">
-            กรุณาเปิดหน้านี้จากโทรศัพท์มือถือ
+            กรุณาเปิดหน้านี้จากโทรศัพท์มือถือ (หน้าจอแนวตั้ง)
           </p>
           <p className="text-sm text-gray-400">
             (Mobile Browser เช่น Safari / Chrome)
