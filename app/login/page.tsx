@@ -4,6 +4,7 @@ import { useState } from "react";
 import { apiClient } from "../services/apiClient";
 import { useRouter } from "next/navigation";
 import { useLoading } from "../context/LoadingContext";
+import { useMobileOnly } from "../hooks/useMobileOnly";
 
 import Swal from "sweetalert2";
 
@@ -18,6 +19,7 @@ const DEPARTMENTS = [
 
 export default function LoginPage() {
   const router = useRouter();
+  const isMobile = useMobileOnly();
   const { showLoading, hideLoading } = useLoading();
 
   const [employeeId, setEmployeeId] = useState("");
@@ -87,6 +89,24 @@ export default function LoginPage() {
     } finally {
       hideLoading();
     }
+  }
+
+  if (!isMobile) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100 p-6">
+        <div className="bg-white p-6 rounded shadow text-center max-w-sm">
+          <h1 className="text-xl font-bold mb-2">
+            📱 ใช้งานผ่านมือถือเท่านั้น
+          </h1>
+          <p className="text-gray-600 mb-4">
+            กรุณาเปิดหน้านี้จากโทรศัพท์มือถือ
+          </p>
+          <p className="text-sm text-gray-400">
+            (Mobile Browser เช่น Safari / Chrome)
+          </p>
+        </div>
+      </div>
+    );
   }
 
   return (

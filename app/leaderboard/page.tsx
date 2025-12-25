@@ -75,10 +75,7 @@ export default function LeaderboardPage() {
           <div className="grid grid-cols-3 gap-3 mt-3">
             {user.images.map((img, idx) => (
               <div key={idx} className="text-center">
-                <img
-                  src={`${process.env.NEXT_PUBLIC_API_URL}${img.imageUrl}`}
-                  className="w-full rounded shadow"
-                />
+                <img src={img.imageUrl} className="w-full rounded shadow" />
                 <p className="text-xs mt-1">{img.title}</p>
               </div>
             ))}

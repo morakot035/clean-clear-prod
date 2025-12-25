@@ -5,6 +5,7 @@ import { useAuthGuard } from "../hooks/useAuthGuard";
 import { BingoCell } from "../components/BingoCell";
 import { apiClient, BingoTask } from "../services/apiClient";
 import { useLoading } from "../context/LoadingContext";
+import { useMobileOnly } from "../hooks/useMobileOnly";
 import Swal from "sweetalert2";
 import "./bingo.css";
 
@@ -33,6 +34,7 @@ function getBingoResult(tasks: BingoTask[]) {
 
 export default function BingoPage() {
   useAuthGuard();
+  const isMobile = useMobileOnly();
   const { showLoading, hideLoading } = useLoading();
 
   const [tasks, setTasks] = useState<BingoTask[]>([]);
@@ -115,6 +117,24 @@ export default function BingoPage() {
 
   /* ===== ช่องที่อยู่ในเส้น BINGO ===== */
   const bingoCells = new Set<number>(completedLines.flat());
+
+  if (!isMobile) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100 p-6">
+        <div className="bg-white p-6 rounded shadow text-center max-w-sm">
+          <h1 className="text-xl font-bold mb-2">
+            📱 ใช้งานผ่านมือถือเท่านั้น
+          </h1>
+          <p className="text-gray-600 mb-4">
+            กรุณาเปิดหน้านี้จากโทรศัพท์มือถือ
+          </p>
+          <p className="text-sm text-gray-400">
+            (Mobile Browser เช่น Safari / Chrome)
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bingo-wrapper">
